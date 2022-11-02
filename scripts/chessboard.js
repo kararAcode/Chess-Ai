@@ -3,14 +3,13 @@
 /* eslint-disable no-empty */
 class ChessBoard {
   constructor() {
-    this.colorGrid = [];
 
+    this.grid = [];
+    
     this.cellWidth = windowWidth/8;
     this.cellHeight = windowHeight/8;
 
-
-    this.whitePieces = this.generatePieces("w");
-    this.blackPieces = this.generatePieces("b");
+    
 
     if (this.cellWidth > this.cellHeight) {
       this.cellWidth = this.cellHeight;
@@ -27,23 +26,35 @@ class ChessBoard {
       let row = [];
       for (let j = 0; j < 8; j++) {
         if (j === 0 && i !== 0) {
-          row.push(Number(!n));
+          row.push({
+            color: Number(!n),
+            occupied: null,
+            piece: null
+          });
         }
 
 				else {
-					row.push(n);
-					n = Number(!n); 
-				}
+          row.push({
+            color: n,
+            occupied: null,
+            piece: null
+          });
+          
+          n = Number(!n); 
+        }
       }
 
-      this.colorGrid.push(row);
+      this.grid.push(row);
     }
+
+    this.whitePieces = this.generatePieces("w");
+    this.blackPieces = this.generatePieces("b");
   }
 
   display() {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
-        fill(this.colorGrid[i][j] * 255);
+        fill(this.grid[i][j].color * 255);
         rect(this.cellWidth * i, this.cellHeight * j, this.cellWidth, this.cellHeight);
       }
     }
@@ -62,12 +73,15 @@ class ChessBoard {
       Array(8).fill("pawn"),
       ["rook", "knight", "bishop", "king", "queen", "bishop", "knight", "rook"]
     ];
-    console.log(order)
 
     if (color === "b") {
       for (let i = 0; i <= 1; i++) {
         for (let j = 0; j < 8; j++) {
-          pieces.push(new Piece(order[Number(!i)][j], "b", i, j, this));
+          let piece = new Bishop("b", i, j, this);
+          pieces.push(piece);
+          this.grid[i][j].occupied = true;
+          this.grid[i][j].piece = piece;
+          
         }
       }
     }
@@ -75,7 +89,10 @@ class ChessBoard {
     else if (color === "w") {
       for (let i = 6; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
-          pieces.push(new Piece(order[i-6][j], "w", i, j, this));
+          let piece = new Bishop("w", i, j, this);
+          pieces.push(piece);
+          this.grid[i][j].occupied = true;
+          this.grid[i][j].piece = piece;
         }
       }
     }
