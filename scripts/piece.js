@@ -6,7 +6,6 @@ class Piece {
     this.x = x;
     this.y = y;
     this.chessboard = chessboard;
-    this.drag = false;
   }
   
   display() {

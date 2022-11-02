@@ -19,29 +19,18 @@ class ChessBoard {
       this.cellHeight = this.cellWidth;
     }
 
+    // 
 
-    let n = 1;
 
     for (let i = 0; i < 8; i++) {
       let row = [];
       for (let j = 0; j < 8; j++) {
-        if (j === 0 && i !== 0) {
-          row.push({
-            color: Number(!n),
-            occupied: null,
-            piece: null
-          });
-        }
+        row.push({
+          occupied: null,
+          piece: null,
+          color: (i+j) % 2 === 0 ? `white`: 'black'
+        });
 
-				else {
-          row.push({
-            color: n,
-            occupied: null,
-            piece: null
-          });
-          
-          n = Number(!n); 
-        }
       }
 
       this.grid.push(row);
@@ -54,8 +43,8 @@ class ChessBoard {
   display() {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
-        fill(this.grid[i][j].color * 255);
-        rect(this.cellWidth * i, this.cellHeight * j, this.cellWidth, this.cellHeight);
+        fill(this.grid[i][j].color);
+        rect(this.cellWidth * j, this.cellHeight * i, this.cellWidth, this.cellHeight);
       }
     }
   }
