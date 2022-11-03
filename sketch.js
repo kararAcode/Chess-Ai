@@ -35,8 +35,16 @@ function mousePressed() {
   }
 
   if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
+    chessboard.grid[activePiece.y][activePiece.x].piece = activePiece;
+    chessboard.grid[activePiece.y][activePiece.x].occupied = true;
+
+    chessboard.grid[y][x].piece = activePiece;
+    chessboard.grid[y][x].occupied = true;
+
     activePiece.place(y, x);
     activePiece = null;
+
+    chessboard.clear();
   }
 
 }
