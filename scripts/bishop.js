@@ -6,13 +6,78 @@ class Bishop extends Piece {
   }
 
   showPossibleMoves() {
-    fill("(210, 215, 211, 0.3)");
-    for (let i = 1; i < 8 - this.x; i++) {
-      if (!this.chessboard.grid[this.x+i][this.y+i].occupied) {
-        
-        // this.chessboard.grid[this.y][this.x].color = Number(!this.chessboard.grid[this.y][this.x].color);
-        // // circle(this.chessboard.cellWidth * this.x + this.chessboard.cellWidth/2, this.chessboard.cellHeight * this.y + this.chessboard.cellHeight/2, this.chessboard.cellWidth/3);
+    for (let i = 1; i < 7; i++) {
+
+      if (!(this.x + i > 7) && !(this.y + i > 7)) {
+
+        if (this.chessboard.grid[this.x+i][this.y+i].occupied) {
+          if (this.chessboard.grid[this.x+i][this.y+i].piece.color !== this.color) {
+            this.chessboard.grid[this.x+i][this.y+i].color = "rgba(0, 208, 0, 0.5)";
+          }
+          break;
+        }
+
+        else {
+          this.chessboard.grid[this.x+i][this.y+i].color = "rgba(0, 208, 0, 0.5)";
+        }
       }
     }
+
+    for (let i = 1; i < 7; i++) {
+
+      if (!(this.x - i < 0) && !(this.y + i > 7)) {
+
+        if (this.chessboard.grid[this.x-i][this.y+i].occupied) {
+          if (this.chessboard.grid[this.x-i][this.y+i].piece.color !== this.color) {
+            this.chessboard.grid[this.x-i][this.y+i].color = "rgba(0, 208, 0, 0.5)";
+          }
+          break;
+        }
+
+        else {
+          this.chessboard.grid[this.x-i][this.y+i].color = "rgba(0, 208, 0, 0.5)";
+        }
+      
+      }
+    }
+
+    for (let i = 1; i < 7; i++) {
+
+      if (!(this.x + i > 7) && !(this.y - i < 0)) {
+       
+
+        if (this.chessboard.grid[this.x+i][this.y-i].occupied) {
+          if (this.chessboard.grid[this.x+i][this.y-i].piece.color !== this.color) {
+            this.chessboard.grid[this.x+i][this.y-i].color = "rgba(0, 208, 0, 0.5)";
+          }
+          break;
+        }
+
+        else {
+          this.chessboard.grid[this.x+i][this.y-i].color = "rgba(0, 208, 0, 0.5)";
+        }
+
+      }
+      
+    }
+    
+    for (let i = 1; i < 7; i++) {
+      if (!(this.x - i < 0) && !(this.y - i < 0)) {
+
+        if (this.chessboard.grid[this.x-i][this.y-i].occupied) {
+          if (this.chessboard.grid[this.x-i][this.y-i].piece.color !== this.color) {
+            this.chessboard.grid[this.x-i][this.y-i].color = "rgba(0, 208, 0, 0.5)";
+          }
+          break;
+        }
+
+        else {
+          this.chessboard.grid[this.x-i][this.y-i].color = "rgba(0, 208, 0, 0.5)";
+        }
+      
+      }
+      
+    }
+    
   }
 }

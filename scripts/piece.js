@@ -11,4 +11,9 @@ class Piece {
   display() {
     image(this.img, this.chessboard.cellWidth * this.y, this.chessboard.cellHeight * this.x, this.chessboard.cellWidth, this.chessboard.cellHeight);
   }
+
+  place(i, j) {
+    this.x = i;
+    this.y = j;
+  }
 }

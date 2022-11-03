@@ -19,7 +19,7 @@ class ChessBoard {
       this.cellHeight = this.cellWidth;
     }
 
-    // 
+    
 
 
     for (let i = 0; i < 8; i++) {
@@ -28,7 +28,7 @@ class ChessBoard {
         row.push({
           occupied: null,
           piece: null,
-          color: (i+j) % 2 === 0 ? `white`: 'black'
+          color: (i+j) % 2 === 0 ? "white": "black"
         });
 
       }
@@ -90,13 +90,6 @@ class ChessBoard {
 
   }
 
-  findPiece(x, y) {
-    for (let i = 0; i < 16; i++) {
-      if (this.whitePieces[i].x === x && this.whitePieces[i].y === y) {
-        return this.whitePieces[i];
-      } 
-    }
-  }
 }  
 
 

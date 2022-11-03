@@ -20,9 +20,9 @@ function draw() {
   chessboard.display();
   chessboard.displayPieces();
 
-  // if (activePiece !== null) {
-  //   activePiece.showPossibleMoves();
-  // }
+  if (activePiece !== null) {
+    activePiece.showPossibleMoves();
+  }
 }
 
 
@@ -30,8 +30,13 @@ function mousePressed() {
   let x = Math.floor(mouseX/chessboard.cellWidth);
   let y = Math.floor(mouseY/chessboard.cellHeight);
 
-  console.log(y+1, x+1)
-  chessboard.grid[y+1][x+1].color = "red"; 
+  if (activePiece === null) {
+    activePiece = chessboard.grid[y][x].piece;
+  }
 
+  if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
+    activePiece.place(y, x);
+    activePiece = null;
+  }
 
 }
