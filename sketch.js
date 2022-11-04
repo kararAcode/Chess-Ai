@@ -30,13 +30,11 @@ function mousePressed() {
   let x = Math.floor(mouseX/chessboard.cellWidth);
   let y = Math.floor(mouseY/chessboard.cellHeight);
 
-  if (activePiece === null || chessboard.grid[y][x].piece) {
 
+  if (activePiece === null || chessboard.grid[y][x].piece) {
     chessboard.clear();
     activePiece = chessboard.grid[y][x].piece;
   
-
-
   }
 
   if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
