@@ -50,9 +50,12 @@ class ChessBoard {
   }
 
   displayPieces() {
-    for (let n = 0; n < 16; n++) {
-      this.whitePieces[n].display();
-      this.blackPieces[n].display();
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (this.grid[i][j].piece !== null) {
+          this.grid[i][j].piece.display();
+        }
+      }
     }
   }
 
@@ -99,5 +102,3 @@ class ChessBoard {
   }
 
 }  
-
-

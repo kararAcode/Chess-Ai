@@ -13,6 +13,7 @@ class Piece {
   }
 
   place(i, j) {
+
     this.x = i;
     this.y = j;
   }
