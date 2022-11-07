@@ -42,7 +42,7 @@ class ChessBoard {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
         fill(this.grid[i][j].color);
-        rect(this.cellWidth * j, this.cellHeight * i, this.cellWidth, this.cellHeight);
+        rect(width/2 - this.cellWidth*4 + this.cellWidth * j, this.cellHeight * i, this.cellWidth, this.cellHeight);
       }
     }
   }

@@ -9,7 +9,7 @@ class Piece {
   }
   
   display() {
-    image(this.img, this.chessboard.cellWidth * this.y, this.chessboard.cellHeight * this.x, this.chessboard.cellWidth, this.chessboard.cellHeight);
+    image(this.img, width/2 - this.chessboard.cellWidth*4 + this.chessboard.cellWidth * this.y, this.chessboard.cellHeight * this.x, this.chessboard.cellWidth, this.chessboard.cellHeight);
   }
 
   place(i, j) {

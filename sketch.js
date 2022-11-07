@@ -19,7 +19,7 @@ function setup() {
 }  
 
 function draw() {
-  background(220);
+  background(255);
   chessboard.display();
   chessboard.displayPieces();
 
