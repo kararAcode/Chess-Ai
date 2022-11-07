@@ -67,17 +67,17 @@ class ChessBoard {
     }
   }
   
-  generatePieces(color) {
+  async generatePieces(color) {
     let pieces = [];
-    let order = [
-      Array(8).fill("pawn"),
-      ["rook", "knight", "bishop", "king", "queen", "bishop", "knight", "rook"]
+    let order = await [
+      Array(8).fill(Pawn),
+      [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
     ];
 
     if (color === "b") {
       for (let i = 0; i <= 1; i++) {
         for (let j = 0; j < 8; j++) {
-          let piece = new Bishop("b", i, j, this);
+          let piece = new order[Number(!i)][j]("b", i, j, this);
           pieces.push(piece);
           this.grid[i][j].occupied = true;
           this.grid[i][j].piece = piece;
@@ -89,7 +89,7 @@ class ChessBoard {
     else if (color === "w") {
       for (let i = 6; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
-          let piece = new Bishop("w", i, j, this);
+          let piece = new order[i-6][j]("w", i, j, this);
           pieces.push(piece);
           this.grid[i][j].occupied = true;
           this.grid[i][j].piece = piece;
