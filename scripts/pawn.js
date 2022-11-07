@@ -31,7 +31,7 @@ class Pawn extends Piece {
     }
 
     if (this.checkSpot(this.x + this.dx * 2, this.y) && this.firstTurn) {
-      if (!this.chessboard.grid[this.x + this.dx *2][this.y].occupied) {
+      if (!this.chessboard.grid[this.x + this.dx *2][this.y].occupied && !this.chessboard.grid[this.x + this.dx][this.y].occupied ) {
         this.chessboard.grid[this.x + this.dx *2][this.y].color = "rgba(0, 208, 0, 0.5)";
       }    
     }
