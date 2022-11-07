@@ -26,7 +26,7 @@ class ChessBoard {
         row.push({
           occupied: null,
           piece: null,
-          color: (i+j) % 2 === 0 ? "white": "black"
+          color: (i+j) % 2 === 0 ? "rgb(238, 238, 210)": "rgb(118, 150, 86)"
         });
 
       }
@@ -60,14 +60,14 @@ class ChessBoard {
   clear() {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
-        this.grid[i][j].color = (i+j) % 2 === 0 ? "white": "black";
+        this.grid[i][j].color = (i+j) % 2 === 0 ? "rgb(238, 238, 210)": "rgb(118, 150, 86)";
       }
     }
   }
   
-  async generatePieces(color) {
+  generatePieces(color) {
     let pieces = [];
-    let order = await [
+    let order = [
       Array(8).fill(Pawn),
       [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
     ];

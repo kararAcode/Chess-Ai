@@ -2,7 +2,7 @@ class Piece {
   constructor(name, color, x, y, chessboard) {
     this.name = name;
     this.color = color;
-    this.img = loadImage(`assets/${color}_${name}_2x_ns.png`);
+    this.img = loadImage(`assets/${color}_${name}.png`);
     this.x = x;
     this.y = y;
     this.chessboard = chessboard;

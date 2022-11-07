@@ -40,8 +40,6 @@ function mousePressed() {
     chessboard.clear();
   }
 
-  
-
 
   if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
 
