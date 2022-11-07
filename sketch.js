@@ -31,7 +31,7 @@ function draw() {
 
 function mousePressed() {
   
-  let x = Math.floor(mouseX/chessboard.cellWidth);
+  let x = Math.floor(mouseX/chessboard.cellWidth) - 4;
   let y = Math.floor(mouseY/chessboard.cellHeight);
 
 
