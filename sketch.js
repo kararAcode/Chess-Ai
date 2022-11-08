@@ -14,7 +14,10 @@ let turns = ["w", "b"];
 let turn = 0;
 
 let state = "start";
-let btn;
+let playerBtn;
+let aiBtn;
+
+
 
 let moveSound;
 
@@ -33,7 +36,8 @@ function draw() {
     userStartAudio();
   } 
 
-  if (state === "play") {
+  if (state === "play-normal") {
+    noStroke();
     background(255);
     chessboard.display();
     chessboard.displayPieces();
@@ -52,14 +56,22 @@ function draw() {
 
 function startScreen() {
   background("black");
-  let btnWidth = 300;
-  let btnHeight = 120;
+  let btnWidth = 180;
+  let btnHeight = 80;
 
-  btn = new Button(width/2-btnWidth/2, height/2-btnHeight/2, btnWidth, btnHeight, "red", "Player vs Player");
+  stroke(255)
+  playerBtn = new Button(width/2-btnWidth/2, height/2-btnHeight/2, btnWidth, btnHeight, "black", "Player vs Player", 10);
 
-  btn.display();
-  btn.onClick(() => {
-    state = "play";
+  playerBtn.display();
+  playerBtn.onClick(() => {
+    state = "play-normal";
+  });
+
+  aiBtn = new Button(width/2-btnWidth/2, height/2-btnHeight/2 + height*0.15, btnWidth, btnHeight, "black", "Player vs Computer", 10);
+
+  aiBtn.display();
+  aiBtn.onClick(() => {
+    state = "play-ai";
   });
 }
 
@@ -81,7 +93,7 @@ function displayGameOver() {
 
 function mousePressed() {
   
-  if (state === "play") {
+  if (state === "play-normal") {
     let x = Math.floor(mouseX/chessboard.cellWidth) - 4;
     let y = Math.floor(mouseY/chessboard.cellHeight);
   

@@ -6,8 +6,8 @@ class ChessBoard {
 
     this.grid = [];
     
-    this.cellWidth = windowWidth/8;
-    this.cellHeight = windowHeight/8;
+    this.cellWidth = width/8;
+    this.cellHeight = height/8;
 
     
 
@@ -48,8 +48,8 @@ class ChessBoard {
   }
 
   init() {
-    this.cellWidth = windowWidth/8;
-    this.cellHeight = windowHeight/8;
+    this.cellWidth = width/8;
+    this.cellHeight = height/8;
 
     
 
