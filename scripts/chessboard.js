@@ -47,6 +47,21 @@ class ChessBoard {
     }
   }
 
+  init() {
+    this.cellWidth = windowWidth/8;
+    this.cellHeight = windowHeight/8;
+
+    
+
+    if (this.cellWidth > this.cellHeight) {
+      this.cellWidth = this.cellHeight;
+    }
+
+    else {
+      this.cellHeight = this.cellWidth;
+    }
+  }
+
   displayPieces() {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {

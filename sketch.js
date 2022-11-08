@@ -16,6 +16,11 @@ let turn = 0;
 let state = "start";
 let btn;
 
+let moveSound;
+
+function preload() {
+  moveSound = loadSound("assets/move-self.mp3");
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -25,6 +30,7 @@ function setup() {
 function draw() {
   if (state === "start") {
     startScreen();
+    userStartAudio();
   } 
 
   if (state === "play") {
@@ -102,6 +108,8 @@ function mousePressed() {
     
       activePiece.place(y, x);
       activePiece = null;
+      moveSound.play();
+
       turn = Number(!turn);
     
       chessboard.clear();
