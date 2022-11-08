@@ -13,21 +13,46 @@ let activePiece = null;
 let turns = ["w", "b"];
 let turn = 0;
 
+let state = "play";
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   chessboard = new ChessBoard();
 }  
 
 function draw() {
-  background(255);
-  chessboard.display();
-  chessboard.displayPieces();
-
-  if (activePiece !== null) {
-    activePiece.showPossibleMoves();
+  if (state === "play") {
+    background(255);
+    chessboard.display();
+    chessboard.displayPieces();
+  
+    if (activePiece !== null) {
+      activePiece.showPossibleMoves();
+    }
   }
+
+  if (state === "gameover" && activePiece === null) {
+    displayGameOver();
+  }
+
+  
 }
 
+function displayGameOver() {
+  background("white");
+  textSize(50);
+  textAlign(CENTER);    // centers text
+  fill("black");
+
+  if (turns[Number(!turn)] === "b") {
+    text("BLACK WINS", width/2, height/2);
+  } 
+
+  else {
+    text("WHITE WINS", width/2, height/2);
+  }
+
+}
 
 function mousePressed() {
   
@@ -46,14 +71,23 @@ function mousePressed() {
     chessboard.grid[activePiece.x][activePiece.y].piece = null;
     chessboard.grid[activePiece.x][activePiece.y].occupied = false;
 
+    if (chessboard.grid[y][x].occupied) {
+      if (chessboard.grid[y][x].piece.name === "king") {
+        state = "gameover";
+      }
+    }
+
     chessboard.grid[y][x].piece = activePiece;
     chessboard.grid[y][x].occupied = true;
-
+  
     activePiece.place(y, x);
     activePiece = null;
     turn = Number(!turn);
-
+  
     chessboard.clear();
+    
+
+    
   }
 
 }
