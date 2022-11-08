@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-empty */
-// Project Title
-// Your Name
+// Chess-Ai
+// Karar Al-Shanoon
 // Date
 //
 // Extra for Experts:
@@ -13,7 +13,9 @@ let activePiece = null;
 let turns = ["w", "b"];
 let turn = 0;
 
-let state = "play";
+let state = "start";
+let btn;
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -21,6 +23,10 @@ function setup() {
 }  
 
 function draw() {
+  if (state === "start") {
+    startScreen();
+  } 
+
   if (state === "play") {
     background(255);
     chessboard.display();
@@ -36,6 +42,19 @@ function draw() {
   }
 
   
+}
+
+function startScreen() {
+  background("black");
+  let btnWidth = 300;
+  let btnHeight = 120;
+
+  btn = new Button(width/2-btnWidth/2, height/2-btnHeight/2, btnWidth, btnHeight, "red", "Player vs Player");
+
+  btn.display();
+  btn.onClick(() => {
+    state = "play";
+  });
 }
 
 function displayGameOver() {
@@ -56,38 +75,38 @@ function displayGameOver() {
 
 function mousePressed() {
   
-  let x = Math.floor(mouseX/chessboard.cellWidth) - 4;
-  let y = Math.floor(mouseY/chessboard.cellHeight);
-
-
-  if ((activePiece === null || chessboard.grid[y][x].piece && activePiece.color === chessboard.grid[y][x].piece.color) && chessboard.grid[y][x].piece.color === turns[turn]) {
-    activePiece = chessboard.grid[y][x].piece;
-    chessboard.clear();
-  }
-
-
-  if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
-
-    chessboard.grid[activePiece.x][activePiece.y].piece = null;
-    chessboard.grid[activePiece.x][activePiece.y].occupied = false;
-
-    if (chessboard.grid[y][x].occupied) {
-      if (chessboard.grid[y][x].piece.name === "king") {
-        state = "gameover";
-      }
+  if (state === "play") {
+    let x = Math.floor(mouseX/chessboard.cellWidth) - 4;
+    let y = Math.floor(mouseY/chessboard.cellHeight);
+  
+  
+    if ((activePiece === null || chessboard.grid[y][x].piece && activePiece.color === chessboard.grid[y][x].piece.color) && chessboard.grid[y][x].piece.color === turns[turn]) {
+      activePiece = chessboard.grid[y][x].piece;
+      chessboard.clear();
     }
-
-    chessboard.grid[y][x].piece = activePiece;
-    chessboard.grid[y][x].occupied = true;
   
-    activePiece.place(y, x);
-    activePiece = null;
-    turn = Number(!turn);
   
-    chessboard.clear();
+    if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
+  
+      chessboard.grid[activePiece.x][activePiece.y].piece = null;
+      chessboard.grid[activePiece.x][activePiece.y].occupied = false;
+  
+      if (chessboard.grid[y][x].occupied) {
+        if (chessboard.grid[y][x].piece.name === "king") {
+          state = "gameover";
+        }
+      }
+      
+      chessboard.grid[y][x].piece = activePiece;
+      chessboard.grid[y][x].occupied = true;
     
-
+      activePiece.place(y, x);
+      activePiece = null;
+      turn = Number(!turn);
     
+      chessboard.clear();
+      
+    }
   }
-
+  
 }
