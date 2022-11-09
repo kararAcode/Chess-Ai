@@ -14,9 +14,14 @@ let turns = ["w", "b"];
 let turn = 0;
 
 let state = "start";
+
 let playerBtn;
 let aiBtn;
+let takebackBtn;
+let btnWidth = 180;
+let btnHeight = 80;
 
+let previousBoards = [];
 
 
 let moveSound;
@@ -45,6 +50,18 @@ function draw() {
     if (activePiece !== null) {
       activePiece.showPossibleMoves();
     }
+
+    
+
+    takebackBtn = new Button(width*0.9-btnWidth/2, height/2-btnHeight/2, btnWidth, btnHeight, "black", "TakeBack", 10);
+
+    takebackBtn.display();
+    takebackBtn.onClick(() => {
+      chessboard.grid = previousBoards[previousBoards.length - 1].slice();
+
+    });
+
+
   }
 
   if (state === "gameover" && activePiece === null) {
@@ -56,8 +73,7 @@ function draw() {
 
 function startScreen() {
   background("black");
-  let btnWidth = 180;
-  let btnHeight = 80;
+  
 
   stroke(255);
   playerBtn = new Button(width/2-btnWidth/2, height/2-btnHeight/2, btnWidth, btnHeight, "black", "Player vs Player", 10);
@@ -114,6 +130,8 @@ function mousePressed() {
           state = "gameover";
         }
       }
+
+      previousBoards.push(chessboard.grid);
       
       chessboard.grid[y][x].piece = activePiece;
       chessboard.grid[y][x].occupied = true;
