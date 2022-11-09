@@ -1,4 +1,5 @@
-window.addEventListener("resize", () => {
 
+window.addEventListener("resize", () => {
+    setup();
     chessboard.init();
-});
+  });

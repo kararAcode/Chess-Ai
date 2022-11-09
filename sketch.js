@@ -59,7 +59,7 @@ function startScreen() {
   let btnWidth = 180;
   let btnHeight = 80;
 
-  stroke(255)
+  stroke(255);
   playerBtn = new Button(width/2-btnWidth/2, height/2-btnHeight/2, btnWidth, btnHeight, "black", "Player vs Player", 10);
 
   playerBtn.display();
@@ -130,3 +130,11 @@ function mousePressed() {
   }
   
 }
+
+
+
+
+window.addEventListener("resize", () => {
+  setup();
+  chessboard.init();
+});

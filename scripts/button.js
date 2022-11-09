@@ -2,7 +2,8 @@
 class Button {
   constructor(x, y, w, h, color, text="", radius=0) {
     // attributes of button
-    // defaults to no text
+    // defaults to no text and unrounded corners
+  
     this.x = x;
     this.y = y;
     this.w = w;
