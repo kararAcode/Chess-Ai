@@ -1,5 +1,6 @@
 
 window.addEventListener("resize", () => {
-    setup();
+    createCanvas(windowWidth, windowHeight);
+
     chessboard.init();
   });

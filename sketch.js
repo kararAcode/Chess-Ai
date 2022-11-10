@@ -23,7 +23,6 @@ let btnHeight = 80;
 
 let previousBoards = [];
 
-
 let moveSound;
 
 function preload() {
@@ -57,7 +56,7 @@ function draw() {
 
     takebackBtn.display();
     takebackBtn.onClick(() => {
-      chessboard.grid = previousBoards[previousBoards.length - 1].slice();
+      chessboard.grid = loadJSON("lastMove.json");
 
     });
 
@@ -107,7 +106,7 @@ function displayGameOver() {
 
 }
 
-function mousePressed() {
+async function mousePressed() {
   
   if (state === "play-normal") {
     let x = Math.floor(mouseX/chessboard.cellWidth) - 4;
@@ -121,6 +120,8 @@ function mousePressed() {
   
   
     if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
+      save(chessboard.grid, "lastMove.json");
+    
   
       chessboard.grid[activePiece.x][activePiece.y].piece = null;
       chessboard.grid[activePiece.x][activePiece.y].occupied = false;
@@ -131,10 +132,12 @@ function mousePressed() {
         }
       }
 
-      previousBoards.push(chessboard.grid);
       
+
       chessboard.grid[y][x].piece = activePiece;
       chessboard.grid[y][x].occupied = true;
+
+    
     
       activePiece.place(y, x);
       activePiece = null;
@@ -152,7 +155,3 @@ function mousePressed() {
 
 
 
-window.addEventListener("resize", () => {
-  setup();
-  chessboard.init();
-});
