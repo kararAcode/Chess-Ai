@@ -56,7 +56,6 @@ function draw() {
 
     takebackBtn.display();
     takebackBtn.onClick(() => {
-      chessboard.grid = loadJSON("lastMove.json");
 
     });
 
@@ -113,14 +112,17 @@ async function mousePressed() {
     let y = Math.floor(mouseY/chessboard.cellHeight);
   
   
-    if ((activePiece === null || chessboard.grid[y][x].piece && activePiece.color === chessboard.grid[y][x].piece.color) && chessboard.grid[y][x].piece.color === turns[turn]) {
-      activePiece = chessboard.grid[y][x].piece;
-      chessboard.clear();
+    if ((activePiece === null || chessboard.grid[y][x].piece && activePiece.color === chessboard.grid[y][x].piece.color) && chessboard.grid[y][x].occupied) {
+      if (chessboard.grid[y][x].piece.color === turns[turn]) {
+        activePiece = chessboard.grid[y][x].piece;
+        chessboard.clear();
+      }
+
+      
     }
   
   
     if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
-      save(chessboard.grid, "lastMove.json");
     
   
       chessboard.grid[activePiece.x][activePiece.y].piece = null;
