@@ -132,6 +132,8 @@ async function mousePressed() {
         if (chessboard.grid[y][x].piece.name === "king") {
           state = "gameover";
         }
+
+        chessboard.grid[y][x].piece.delete();
       }
 
       

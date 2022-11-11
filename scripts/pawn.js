@@ -15,39 +15,23 @@ class Pawn extends Piece {
     }
   }
 
-  showPossibleMoves() {
+  getPossibleMoves() {
+    let moves = [];
 
-    this.showPossibleKills();
-    
-    if (this.x !== this.startX) {
-      this.firstTurn = false;
-    }
-        
-    if (this.checkSpot(this.x + this.dx, this.y)) {
-      if (!this.chessboard.grid[this.x + this.dx][this.y].occupied) {
-        this.chessboard.grid[this.x + this.dx][this.y].color = "rgba(0, 208, 0, 0.5)";
-      }
-
-    }
-
-    if (this.checkSpot(this.x + this.dx * 2, this.y) && this.firstTurn) {
-      if (!this.chessboard.grid[this.x + this.dx *2][this.y].occupied && !this.chessboard.grid[this.x + this.dx][this.y].occupied ) {
-        this.chessboard.grid[this.x + this.dx *2][this.y].color = "rgba(0, 208, 0, 0.5)";
-      }    
-    }
-
-    
-  }
-
-  checkSpot(x, y) {  
-    return !(x > 7 || x < 0 || y > 7 || y < 0);    
-  }
-
-  showPossibleKills() {
     if (this.checkSpot(this.x + this.dx, this.y + this.dx)) {
       if (this.chessboard.grid[this.x + this.dx][this.y + this.dx].occupied ) {
         if (this.chessboard.grid[this.x + this.dx][this.y + this.dx].piece.color !== this.color) { 
-          this.chessboard.grid[this.x + this.dx][this.y + this.dx].color = "rgba(0, 208, 0, 0.5)";
+          moves.push({
+            from : {
+              x: this.x,
+              y: this.y
+            },
+  
+            to: {
+              x: this.x + this.dx,
+              y: this.y + this.dx
+            }
+          });         
         }
       }
     }
@@ -55,13 +39,65 @@ class Pawn extends Piece {
     if (this.checkSpot(this.x + this.dx, this.y - this.dx)) {
       if (this.chessboard.grid[this.x + this.dx][this.y - this.dx].occupied ) {
         if (this.chessboard.grid[this.x + this.dx][this.y - this.dx].piece.color !== this.color) { 
-          this.chessboard.grid[this.x + this.dx][this.y - this.dx].color = "rgba(0, 208, 0, 0.5)";
+          moves.push({
+            from : {
+              x: this.x,
+              y: this.y
+            },
+  
+            to: {
+              x: this.x + this.dx,
+              y: this.y - this.dx
+            }
+          });         
         }
       }
     }
 
+    if (this.x !== this.startX) {
+      this.firstTurn = false;
+    }
+        
+    if (this.checkSpot(this.x + this.dx, this.y)) {
+      if (!this.chessboard.grid[this.x + this.dx][this.y].occupied) {
+        moves.push({
+          from : {
+            x: this.x,
+            y: this.y
+          },
+
+          to: {
+            x: this.x + this.dx,
+            y: this.y
+          }
+        });       
+      }
+
+    }
+
+    if (this.checkSpot(this.x + this.dx * 2, this.y) && this.firstTurn) {
+      if (!this.chessboard.grid[this.x + this.dx *2][this.y].occupied && !this.chessboard.grid[this.x + this.dx][this.y].occupied ) {
+        moves.push({
+          from : {
+            x: this.x,
+            y: this.y
+          },
+
+          to: {
+            x: this.x + this.dx * 2,
+            y: this.y
+          }
+        });       
+      }    
+    }
+
+    return moves;
   }
-  
+
+  checkSpot(x, y) {  
+    return !(x > 7 || x < 0 || y > 7 || y < 0);    
+  }
+
 }
 
 

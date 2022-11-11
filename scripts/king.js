@@ -13,12 +13,32 @@ class King extends Piece {
       if (!(possibleX > 7 || possibleX < 0 || possibleY > 7 || possibleY < 0)) {
         if (this.chessboard.grid[possibleX][possibleY].occupied) {
           if (this.chessboard.grid[possibleX][possibleY].piece.color !== this.color) {
-            this.chessboard.grid[possibleX][possibleY].color = "rgba(0, 208, 0, 0.5)";
+            moves.push({
+              from : {
+                x: this.x,
+                y: this.y
+              },
+    
+              to: {
+                x: possibleX,
+                y: possibleY
+              }
+            });           
           }
         }
   
         else {
-          this.chessboard.grid[possibleX][possibleY].color = "rgba(0, 208, 0, 0.5)";
+          moves.push({
+            from : {
+              x: this.x,
+              y: this.y
+            },
+  
+            to: {
+              x: possibleX,
+              y: possibleY
+            }
+          });         
         }
   
       }      

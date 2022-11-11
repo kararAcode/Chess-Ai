@@ -17,7 +17,9 @@ class Piece {
     this.y = j;
   }
 
-  showPossibleMoves() {
+  getPossibleMoves() {
+    let moves = [];
+
     let i = 1;
     let checkList = [...this.checkList];
 
@@ -36,7 +38,17 @@ class Piece {
 
       else if (this.chessboard.grid[possibleX][possibleY].occupied) {
         if (this.chessboard.grid[possibleX][possibleY].piece.color !== this.color) {
-          this.chessboard.grid[possibleX][possibleY].color = "rgba(0, 208, 0, 0.5)";
+          moves.push({
+            from : {
+              x: this.x,
+              y: this.y
+            },
+  
+            to: {
+              x: possibleX,
+              y: possibleY
+            }
+          });        
         }
 
         i = 0;
@@ -45,13 +57,35 @@ class Piece {
       }
 
       else {
-        this.chessboard.grid[possibleX][possibleY].color = "rgba(0, 208, 0, 0.5)";
+        moves.push({
+          from : {
+            x: this.x,
+            y: this.y
+          },
+
+          to: {
+            x: possibleX,
+            y: possibleY
+          }
+        });
       }
       
 
       i++;
     }
     
+  }
+
+  showPossibleMoves() {
+    let moves = this.getPossibleMoves();
+
+    for (let i = 0; i < moves.length; i++) {
+      let move = moves[i];
+      let possibleX = moves[i].to.x;
+      let possibleY = moves[i].to.y;
+
+      this.chessboard.grid[possibleX][possibleY].color = "rgba(0, 208, 0, 0.5)";
+    }
   }
 
   checkSpot(x, y) {
@@ -71,6 +105,11 @@ class Piece {
     } 
     
     return false;
+  }
+
+  delete() {
+    let index = this.chessboard.pieces[this.color].indexOf(this);
+    this.chessboard.pieces[this.color].splice(index, 1); // removes piece
   }
 
 }

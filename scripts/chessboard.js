@@ -5,6 +5,9 @@ class ChessBoard {
   constructor() {
 
     this.grid = [];
+
+    this.turns = ["w", "b"];
+    this.turn = 0;
     
     this.cellWidth = width/8;
     this.cellHeight = height/8;
@@ -36,6 +39,11 @@ class ChessBoard {
 
     this.whitePieces = this.generatePieces("w");
     this.blackPieces = this.generatePieces("b");
+
+    this.pieces = {
+      "w": this.whitePieces, 
+      "b": this.blackPieces
+    };
   }
 
   display() {
@@ -114,4 +122,21 @@ class ChessBoard {
 
   }
 
+  getAllPossibleMoves() {
+    let color = turns[turn];
+    let moves = [];
+    for (let i = 0; i < this.pieces[color].length; i++) {
+      let piece = this.pieces[color][i];
+      let pieceMoves = piece.getPossibleMoves();
+
+      if (pieceMoves !== undefined) {
+        moves.push(...pieceMoves);
+      }
+
+    }
+
+    return moves;
+  }
+
 }  
+
