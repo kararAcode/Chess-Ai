@@ -73,6 +73,8 @@ class Piece {
 
       i++;
     }
+
+    return moves;
     
   }
 
