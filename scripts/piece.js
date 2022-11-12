@@ -12,9 +12,38 @@ class Piece {
     image(this.img, width/2 - this.chessboard.cellWidth*4 + this.chessboard.cellWidth * this.y, this.chessboard.cellHeight * this.x, this.chessboard.cellWidth, this.chessboard.cellHeight);
   }
 
-  place(i, j) {
+  move(i, j, state) {
+    this.chessboard.grid[this.x][this.y].piece = null;
+    this.chessboard.grid[this.x][this.y].occupied = false;
+  
+    if (this.chessboard.grid[i][j].occupied) {
+      if (this.chessboard.grid[i][j].piece.name === "king") {
+        state = "gameover";
+      }
+
+      this.chessboard.grid[i][j].piece.delete(this.chessboard.pieces);
+    }
+
+      
+
+    this.chessboard.grid[i][j].piece = this;
+    this.chessboard.grid[i][j].occupied = true;
+
+    
+    
+
     this.x = i;
     this.y = j;
+  }
+
+  makeMove(pieces, i, j) {
+    if (this.find(pieces, i, j) && this.find(pieces, i, j).length !== 0) {
+      this.find(pieces, i, j)[0].delete(pieces);
+    }
+
+    this.x = i;
+    this.j = j;
+
   }
 
   getPossibleMoves() {
@@ -39,10 +68,7 @@ class Piece {
       else if (this.chessboard.grid[possibleX][possibleY].occupied) {
         if (this.chessboard.grid[possibleX][possibleY].piece.color !== this.color) {
           moves.push({
-            from : {
-              x: this.x,
-              y: this.y
-            },
+            piece: this,
   
             to: {
               x: possibleX,
@@ -58,10 +84,7 @@ class Piece {
 
       else {
         moves.push({
-          from : {
-            x: this.x,
-            y: this.y
-          },
+          piece: this,
 
           to: {
             x: possibleX,
@@ -109,9 +132,24 @@ class Piece {
     return false;
   }
 
-  delete() {
+  find(pieces, i, j) {
+    if (this.color === "b") {
+      return pieces["w"].filter((piece) => {
+        return piece.x === i && piece.y === j;
+      });
+    }
+
+    else {
+      return pieces["b"].filter((piece) => {
+        return piece.x === i && piece.y === j;
+      });
+
+    }
+  }
+
+  delete(pieces) {
     let index = this.chessboard.pieces[this.color].indexOf(this);
-    this.chessboard.pieces[this.color].splice(index, 1); // removes piece
+    pieces[this.color].splice(index, 1); // removes piece
   }
 
 }

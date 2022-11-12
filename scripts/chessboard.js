@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable indent */
 /* eslint-disable no-empty */
+
+
 class ChessBoard {
   constructor() {
 
@@ -122,11 +124,11 @@ class ChessBoard {
 
   }
 
-  getAllPossibleMoves() {
+  getAllPossibleMoves(pieces) {
     let color = turns[turn];
     let moves = [];
-    for (let i = 0; i < this.pieces[color].length; i++) {
-      let piece = this.pieces[color][i];
+    for (let i = 0; i < pieces[color].length; i++) {
+      let piece = pieces[color][i];
       let pieceMoves = piece.getPossibleMoves();
 
       if (pieceMoves !== undefined) {
@@ -136,6 +138,100 @@ class ChessBoard {
     }
 
     return moves;
+  }
+
+  minimaxRoot(pieces, depth, isMaximizing) {
+    let maxEval = -Infinity;
+    let bestMove;
+    let piecesCopy = _.cloneDeep(pieces);
+
+    let moves = this.getAllPossibleMoves(piecesCopy);
+
+
+    for (let i = 0; i < moves.length; i++) {
+      let move = moves[i];
+      move.piece.makeMove(piecesCopy, move.to.x, move.to.y);
+
+      let evaL = this.miniMax(piecesCopy, depth-1, false); 
+
+      if (evaL >= maxEval) {
+        maxEval = eval;
+        bestMove = moves[i];
+      }
+
+    }
+
+    return bestMove;
+  
+  }
+
+  miniMax(pieces, depth, isMaximizing) {
+    let piecesCopy = _.cloneDeep(pieces);
+  
+
+    if (depth === 0) { 
+      return this.evaluateBoard(piecesCopy);
+    }
+
+    if (isMaximizing) {
+      let maxEval = -Infinity;
+      let bestMove;
+      let moves = this.getAllPossibleMoves(piecesCopy);
+
+      for (let i = 0; i < moves.length; i++) {
+        let move = moves[i];
+        move.piece.makeMove(piecesCopy, move.to.x, move.to.y);
+
+        let evaL = this.miniMax(piecesCopy, depth-1, false); 
+        maxEval = Math.max(maxEval, evaL);
+
+      }
+
+      return maxEval;
+    }
+
+    else {
+      let minEval = Infinity;
+      let moves = this.getAllPossibleMoves(piecesCopy);
+
+      for (let i = 0; i < moves.length; i++) {
+        let move = moves[i];
+        move.piece.makeMove(piecesCopy, move.to.x, move.to.y);
+
+        let evaL = this.miniMax(piecesCopy, depth-1, true); 
+        minEval = Math.min(minEval, evaL);
+      }
+
+      return minEval;
+    }
+
+
+
+  }
+
+  evaluateBoard(pieces) {
+
+    let total = 0;
+    let values = {
+      "pawn": 10, 
+      "knight": 30,
+      "bishop": 30,
+      "rook": 50,
+      "queen": 90, 
+      "king": 900
+    };
+
+    for (let i  = 0; i < pieces["b"].length; i++) {
+      let piece = pieces["b"][i];
+      total += values[piece.name];
+    }
+    
+    for (let j = 0; j < pieces["w"].length; j++) {
+      let piece = pieces["w"][j];
+      total -= values[piece.name];
+    } 
+
+    return total;
   }
 
 }  

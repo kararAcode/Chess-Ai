@@ -22,10 +22,7 @@ class Pawn extends Piece {
       if (this.chessboard.grid[this.x + this.dx][this.y + this.dx].occupied ) {
         if (this.chessboard.grid[this.x + this.dx][this.y + this.dx].piece.color !== this.color) { 
           moves.push({
-            from : {
-              x: this.x,
-              y: this.y
-            },
+            piece: this,
   
             to: {
               x: this.x + this.dx,
@@ -40,10 +37,7 @@ class Pawn extends Piece {
       if (this.chessboard.grid[this.x + this.dx][this.y - this.dx].occupied ) {
         if (this.chessboard.grid[this.x + this.dx][this.y - this.dx].piece.color !== this.color) { 
           moves.push({
-            from : {
-              x: this.x,
-              y: this.y
-            },
+            piece: this,
   
             to: {
               x: this.x + this.dx,
@@ -61,10 +55,7 @@ class Pawn extends Piece {
     if (this.checkSpot(this.x + this.dx, this.y)) {
       if (!this.chessboard.grid[this.x + this.dx][this.y].occupied) {
         moves.push({
-          from : {
-            x: this.x,
-            y: this.y
-          },
+          piece: this,
 
           to: {
             x: this.x + this.dx,
@@ -78,10 +69,7 @@ class Pawn extends Piece {
     if (this.checkSpot(this.x + this.dx * 2, this.y) && this.firstTurn) {
       if (!this.chessboard.grid[this.x + this.dx *2][this.y].occupied && !this.chessboard.grid[this.x + this.dx][this.y].occupied ) {
         moves.push({
-          from : {
-            x: this.x,
-            y: this.y
-          },
+          piece: this,
 
           to: {
             x: this.x + this.dx * 2,

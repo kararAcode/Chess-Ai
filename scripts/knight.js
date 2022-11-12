@@ -16,10 +16,7 @@ class Knight extends Piece {
         if (this.chessboard.grid[possibleX][possibleY].occupied) {
           if (this.chessboard.grid[possibleX][possibleY].piece.color !== this.color) {
             moves.push({
-              from : {
-                x: this.x,
-                y: this.y
-              },
+              piece: this,
     
               to: {
                 x: possibleX,
@@ -31,10 +28,7 @@ class Knight extends Piece {
 
         else {
           moves.push({
-            from : {
-              x: this.x,
-              y: this.y
-            },
+            piece: this,
   
             to: {
               x: possibleX,

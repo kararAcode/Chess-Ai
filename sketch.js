@@ -40,7 +40,7 @@ function draw() {
     userStartAudio();
   } 
 
-  if (state === "play-normal") {
+  if (state === "play-normal" || state === "play-ai") {
     noStroke();
     background(255);
     chessboard.display();
@@ -106,11 +106,11 @@ function displayGameOver() {
 }
 
 async function mousePressed() {
+  let x = Math.floor(mouseX/chessboard.cellWidth) - 4;
+  let y = Math.floor(mouseY/chessboard.cellHeight);
   
   if (state === "play-normal") {
-    let x = Math.floor(mouseX/chessboard.cellWidth) - 4;
-    let y = Math.floor(mouseY/chessboard.cellHeight);
-  
+    
   
     if ((activePiece === null || chessboard.grid[y][x].piece && activePiece.color === chessboard.grid[y][x].piece.color) && chessboard.grid[y][x].occupied) {
       if (chessboard.grid[y][x].piece.color === turns[turn]) {
@@ -124,26 +124,8 @@ async function mousePressed() {
   
     if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
     
-  
-      chessboard.grid[activePiece.x][activePiece.y].piece = null;
-      chessboard.grid[activePiece.x][activePiece.y].occupied = false;
-  
-      if (chessboard.grid[y][x].occupied) {
-        if (chessboard.grid[y][x].piece.name === "king") {
-          state = "gameover";
-        }
-
-        chessboard.grid[y][x].piece.delete();
-      }
-
+      activePiece.move(y, x, state);
       
-
-      chessboard.grid[y][x].piece = activePiece;
-      chessboard.grid[y][x].occupied = true;
-
-    
-    
-      activePiece.place(y, x);
       activePiece = null;
       moveSound.play();
 
@@ -151,6 +133,48 @@ async function mousePressed() {
     
       chessboard.clear();
       
+    }
+  }
+
+  if (state === "play-ai") {
+    
+  
+  
+    if ((activePiece === null || chessboard.grid[y][x].piece && activePiece.color === chessboard.grid[y][x].piece.color) && chessboard.grid[y][x].occupied) {
+      if (chessboard.grid[y][x].piece.color === turns[turn] && chessboard.grid[y][x].piece.color === "w") {
+        activePiece = chessboard.grid[y][x].piece;
+        chessboard.clear();
+      }
+
+      
+    }
+  
+  
+    if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
+    
+      await activePiece.move(y, x, state);
+      
+      activePiece = null;
+      moveSound.play();
+
+      turn = 1;
+    
+      chessboard.clear();
+
+      
+      
+    }
+
+    if (turns[turn] === "b") {
+      let moveArr = chessboard.minimaxRoot(chessboard.pieces, 3, 1);
+      let piece = moveArr.piece;
+
+      if (piece.name === "pawn" || piece.name === "king" || piece.name === "knight"){
+        piece.x-=2;
+      }
+
+      chessboard.grid[piece.x][piece.y].piece.move(moveArr.to.x, moveArr.to.y);
+      turn = 0;
     }
   }
   
