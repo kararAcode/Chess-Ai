@@ -56,7 +56,7 @@ function draw() {
 
     takebackBtn.display();
     takebackBtn.onClick(() => {
-
+      chessboard.grid = previousBoards[previousBoards.length - 1];
     });
 
 
@@ -123,7 +123,8 @@ async function mousePressed() {
   
   
     if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
-    
+      
+      previousBoards.push(_.cloneDeep(chessboard.grid));
       activePiece.move(y, x, state);
       
       activePiece = null;
@@ -167,12 +168,13 @@ async function mousePressed() {
 
     if (turns[turn] === "b") {
       let moveArr = chessboard.minimaxRoot(chessboard.pieces, 3, 1);
+      console.log(moveArr);
       let piece = moveArr.piece;
 
       if (piece.name === "pawn" || piece.name === "king" || piece.name === "knight"){
         piece.x-=2;
       }
-
+      
       chessboard.grid[piece.x][piece.y].piece.move(moveArr.to.x, moveArr.to.y);
       turn = 0;
     }

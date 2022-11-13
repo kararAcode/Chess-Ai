@@ -152,7 +152,7 @@ class ChessBoard {
       let move = moves[i];
       move.piece.makeMove(piecesCopy, move.to.x, move.to.y);
 
-      let evaL = this.miniMax(piecesCopy, depth-1, false); 
+      let evaL = this.miniMax(piecesCopy, depth-1, false, -Infinity, Infinity); 
 
       if (evaL >= maxEval) {
         maxEval = eval;
@@ -165,44 +165,54 @@ class ChessBoard {
   
   }
 
-  miniMax(pieces, depth, isMaximizing) {
+  miniMax(pieces, depth, isMaximizing, alpha, beta) {
     let piecesCopy = _.cloneDeep(pieces);
-  
 
     if (depth === 0) { 
       return this.evaluateBoard(piecesCopy);
     }
 
     if (isMaximizing) {
-      let maxEval = -Infinity;
-      let bestMove;
+      let evaL = -Infinity;
+      
+  
       let moves = this.getAllPossibleMoves(piecesCopy);
 
       for (let i = 0; i < moves.length; i++) {
         let move = moves[i];
         move.piece.makeMove(piecesCopy, move.to.x, move.to.y);
 
-        let evaL = this.miniMax(piecesCopy, depth-1, false); 
-        maxEval = Math.max(maxEval, evaL);
+        evaL = this.miniMax(piecesCopy, depth-1, false, alpha, beta); 
+        alpha = Math.max(alpha, evaL);
+
+        if (beta <= alpha) {
+          break;
+        }
 
       }
 
-      return maxEval;
+      return evaL;
     }
 
     else {
-      let minEval = Infinity;
+      
+  
+      let evaL = Infinity;
       let moves = this.getAllPossibleMoves(piecesCopy);
 
       for (let i = 0; i < moves.length; i++) {
         let move = moves[i];
         move.piece.makeMove(piecesCopy, move.to.x, move.to.y);
 
-        let evaL = this.miniMax(piecesCopy, depth-1, true); 
-        minEval = Math.min(minEval, evaL);
+        evaL = this.miniMax(piecesCopy, depth-1, true, alpha, beta); 
+        beta = Math.min(beta, evaL);
+
+        if (beta <= alpha) {
+          break;
+        }
       }
 
-      return minEval;
+      return evaL;
     }
 
 
@@ -213,23 +223,99 @@ class ChessBoard {
 
     let total = 0;
     let values = {
-      "pawn": 10, 
-      "knight": 30,
-      "bishop": 30,
-      "rook": 50,
-      "queen": 90, 
-      "king": 900
+      "pawn": {
+        score: 10,
+        evalArr: [
+          [0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0],
+          [5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0],
+          [1.0,  1.0,  2.0,  3.0,  3.0,  2.0,  1.0,  1.0],
+          [0.5,  0.5,  1.0,  2.5,  2.5,  1.0,  0.5,  0.5],
+          [0.0,  0.0,  0.0,  2.0,  2.0,  0.0,  0.0,  0.0],
+          [0.5, -0.5, -1.0,  0.0,  0.0, -1.0, -0.5,  0.5],
+          [0.5,  1.0, 1.0,  -2.0, -2.0,  1.0,  1.0,  0.5],
+          [0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0]
+        ]
+  
+      },
+      "knight": {
+        score: 30,
+        evalArr: [
+          [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0],
+          [-4.0, -2.0,  0.0,  0.0,  0.0,  0.0, -2.0, -4.0],
+          [-3.0,  0.0,  1.0,  1.5,  1.5,  1.0,  0.0, -3.0],
+          [-3.0,  0.5,  1.5,  2.0,  2.0,  1.5,  0.5, -3.0],
+          [-3.0,  0.0,  1.5,  2.0,  2.0,  1.5,  0.0, -3.0],
+          [-3.0,  0.5,  1.0,  1.5,  1.5,  1.0,  0.5, -3.0],
+          [-4.0, -2.0,  0.0,  0.5,  0.5,  0.0, -2.0, -4.0],
+          [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0]
+        ]
+      },
+      "bishop": {
+        score: 30,
+        evalArr: [
+          [ -2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0],
+          [ -1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -1.0],
+          [ -1.0,  0.0,  0.5,  1.0,  1.0,  0.5,  0.0, -1.0],
+          [ -1.0,  0.5,  0.5,  1.0,  1.0,  0.5,  0.5, -1.0],
+          [ -1.0,  0.0,  1.0,  1.0,  1.0,  1.0,  0.0, -1.0],
+          [ -1.0,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0, -1.0],
+          [ -1.0,  0.5,  0.0,  0.0,  0.0,  0.0,  0.5, -1.0],
+          [ -2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0]
+        ]
+      },
+
+      
+      "rook": {
+        score: 50,
+        evalArr: [
+          [  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0],
+          [  0.5,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0,  0.5],
+          [ -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
+          [ -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
+          [ -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
+          [ -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
+          [ -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
+          [  0.0,   0.0, 0.0,  0.5,  0.5,  0.0,  0.0,  0.0]
+        ]
+      },
+      "queen": {
+        score: 90,
+        evalArr: [
+          [ -2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0],
+          [ -1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -1.0],
+          [ -1.0,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -1.0],
+          [ -0.5,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -0.5],
+          [  0.0,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -0.5],
+          [ -1.0,  0.5,  0.5,  0.5,  0.5,  0.5,  0.0, -1.0],
+          [ -1.0,  0.0,  0.5,  0.0,  0.0,  0.0,  0.0, -1.0],
+          [ -2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0]
+        ]
+      },
+      "king": {
+        score: 900,
+        evalArr: [
+          [ -3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+          [ -3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+          [ -3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+          [ -3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
+          [ -2.0, -3.0, -3.0, -4.0, -4.0, -3.0, -3.0, -2.0],
+          [ -1.0, -2.0, -2.0, -2.0, -2.0, -2.0, -2.0, -1.0],
+          [  2.0,  2.0,  0.0,  0.0,  0.0,  0.0,  2.0,  2.0 ],
+          [  2.0,  3.0,  1.0,  0.0,  0.0,  1.0,  3.0,  2.0 ]
+        ]
+      },
     };
 
     for (let i  = 0; i < pieces["b"].length; i++) {
       let piece = pieces["b"][i];
-      total += values[piece.name];
+      total += values[piece.name].score + values[piece.name].evalArr.slice().reverse()[piece.x][piece.y];
     }
     
     for (let j = 0; j < pieces["w"].length; j++) {
       let piece = pieces["w"][j];
-      total -= values[piece.name];
-    } 
+      total -=  values[piece.name].score + values[piece.name].evalArr[piece.x][piece.y];
+    }
+    
 
     return total;
   }
