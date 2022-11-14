@@ -57,6 +57,8 @@ function draw() {
     takebackBtn.display();
     takebackBtn.onClick(() => {
       chessboard.grid = previousBoards[previousBoards.length - 1];
+      chessboard.clear();
+      turn = Number(!turn);
     });
 
 
@@ -125,14 +127,15 @@ async function mousePressed() {
     if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
       
       previousBoards.push(_.cloneDeep(chessboard.grid));
-      activePiece.move(y, x, state);
+      activePiece.move(y, x);
       
       activePiece = null;
-      moveSound.play();
 
       turn = Number(!turn);
     
       chessboard.clear();
+
+
       
     }
   }

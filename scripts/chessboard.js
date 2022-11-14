@@ -76,6 +76,8 @@ class ChessBoard {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
         if (this.grid[i][j].piece !== null) {
+          
+
           this.grid[i][j].piece.display();
         }
       }
@@ -85,7 +87,15 @@ class ChessBoard {
   clear() {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
+        if (this.grid[i][j].occupied) {
+          if (this.grid[i][j].piece.name === "king" && this.grid[i][j].piece.inDanger) {
+            continue;
+          }
+        }
+
         this.grid[i][j].color = (i+j) % 2 === 0 ? "rgb(238, 238, 210)": "rgb(118, 150, 86)";
+        
+
       }
     }
   }
@@ -124,8 +134,39 @@ class ChessBoard {
 
   }
 
-  getAllPossibleMoves(pieces) {
-    let color = turns[turn];
+  detectDanger(pieces) {
+
+    for (let n = 0; n < 2; n++) {
+
+    
+      let moves = this.getAllPossibleMoves(pieces, turns[n]);
+      let kingPiece = pieces[turns[n]].filter(piece => {
+        return piece.name === "king";
+      })[0];
+
+      for (let i = 0; i < moves.length; i++) {
+        let x = moves[i].to.x;
+        let y = moves[i].to.y;
+
+        if (this.grid[x][y].occupied) {
+          if (this.grid[x][y].piece.name === "king") {
+            this.grid[x][y].piece.inDanger = true;
+            return;
+          }
+        }    
+
+
+      }
+
+      this.grid[kingPiece.x][kingPiece.y].piece.inDanger = false;
+      
+    
+    }
+    
+
+  }
+
+  getAllPossibleMoves(pieces, color) {
     let moves = [];
     for (let i = 0; i < pieces[color].length; i++) {
       let piece = pieces[color][i];

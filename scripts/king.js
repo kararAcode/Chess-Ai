@@ -2,10 +2,12 @@
 class King extends Piece {
   constructor(color, x, y, chessboard) {
     super("king", color, x, y, chessboard);
+    this.inDanger = false;
     this.checkList = [[1, 0], [0, 1], [-1, 0], [0, -1], [1,1], [-1, 1], [-1, -1], [1, -1]];
   }
   
-  showPossibleMoves() {
+  getPossibleMoves() {
+    let moves = [];
     for (let i = 0; i < this.checkList.length; i++) {
       let possibleX = this.x + this.checkList[i][0];
       let possibleY = this.y + this.checkList[i][1];
@@ -40,6 +42,7 @@ class King extends Piece {
       }      
       
     }
+    return moves;
   
   }
 }

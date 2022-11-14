@@ -9,15 +9,25 @@ class Piece {
   }
   
   display() {
+    if (this.inDanger) {
+      console.log("Danger");
+      this.chessboard.grid[this.x][this.y].color = "red";
+    }
+
+    else {
+      this.chessboard.grid[this.x][this.y].color = (this.x+this.y) % 2 === 0 ? "rgb(238, 238, 210)": "rgb(118, 150, 86)";
+    }
+
     image(this.img, width/2 - this.chessboard.cellWidth*4 + this.chessboard.cellWidth * this.y, this.chessboard.cellHeight * this.x, this.chessboard.cellWidth, this.chessboard.cellHeight);
   }
 
-  move(i, j, state) {
+  move(i, j) {
     this.chessboard.grid[this.x][this.y].piece = null;
     this.chessboard.grid[this.x][this.y].occupied = false;
   
     if (this.chessboard.grid[i][j].occupied) {
       if (this.chessboard.grid[i][j].piece.name === "king") {
+        // eslint-disable-next-line no-undef
         state = "gameover";
       }
 
@@ -34,6 +44,11 @@ class Piece {
 
     this.x = i;
     this.y = j;
+    moveSound.play();
+
+
+    this.chessboard.detectDanger(this.chessboard.pieces);
+
   }
 
   makeMove(pieces, i, j) {
@@ -43,6 +58,8 @@ class Piece {
 
     this.x = i;
     this.j = j;
+
+
 
   }
 
@@ -97,8 +114,33 @@ class Piece {
       i++;
     }
 
+    
+
     return moves;
     
+  }
+
+  eliminateMoves(moves) {
+    for (let i = 0; i < moves.length; i++) {
+      let piecesCopy = _.cloneDeep(this.chessboard.pieces);
+      let move = moves[i];
+      let pieceToMove = _.cloneDeep(moves[i].piece);
+
+      pieceToMove.makeMove(piecesCopy, move.to.x, move.to.y);
+      let king = piecesCopy[pieceToMove.color].filter((piece) => {
+        return piece.name === "king";
+      })[0];
+
+      if (king.inDanger) {
+
+        moves.splice(i, 1);
+      }
+
+    
+
+    }
+
+    return moves;
   }
 
   showPossibleMoves() {
