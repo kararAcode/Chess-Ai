@@ -5,16 +5,18 @@
 // Date
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// I attempted to use the minimax algorithim for my "ai"
 
 let chessboard;
 let activePiece = null;
 
-let turns = ["w", "b"];
+
+let turns = ["w", "b"]; // color is chosen from array based on turn
 let turn = 0;
 
 let state = "start";
 
+// btn settings
 let playerBtn;
 let aiBtn;
 let takebackBtn;
@@ -35,33 +37,15 @@ function setup() {
 }  
 
 function draw() {
+  // displays screen based on state
+
   if (state === "start") {
     startScreen();
-    userStartAudio();
+    userStartAudio(); // start audio on input
   } 
 
   if (state === "play-normal" || state === "play-ai") {
-    noStroke();
-    background(255);
-    chessboard.display();
-    chessboard.displayPieces();
-  
-    if (activePiece !== null) {
-      activePiece.showPossibleMoves();
-    }
-
-    
-
-    takebackBtn = new Button(width*0.9-btnWidth/2, height/2-btnHeight/2, btnWidth, btnHeight, "black", "TakeBack", 10);
-
-    takebackBtn.display();
-    takebackBtn.onClick(() => {
-      chessboard.grid = previousBoards[previousBoards.length - 1];
-      chessboard.clear();
-      turn = Number(!turn);
-    });
-
-
+    gameplay();
   }
 
   if (state === "gameover" && activePiece === null) {
@@ -76,18 +60,47 @@ function startScreen() {
   
 
   stroke(255);
-  playerBtn = new Button(width/2-btnWidth/2, height/2-btnHeight/2, btnWidth, btnHeight, "black", "Player vs Player", 10);
+  playerBtn = new Button(width/2-btnWidth/2, height/2-btnHeight/2, btnWidth, btnHeight, "black", "Player vs Player", 10); 
 
   playerBtn.display();
+  // click on this button and a player vs player game will start
   playerBtn.onClick(() => {
     state = "play-normal";
-  });
+  }); 
 
   aiBtn = new Button(width/2-btnWidth/2, height/2-btnHeight/2 + height*0.15, btnWidth, btnHeight, "black", "Player vs Computer", 10);
 
   aiBtn.display();
+  // click on this button and a player vs "ai" game will start
   aiBtn.onClick(() => {
     state = "play-ai";
+  });
+}
+
+function gameplay() {
+  noStroke();
+  background(255);
+  chessboard.display(); // display the board/grid
+  chessboard.displayPieces(); 
+
+  if (activePiece !== null) {
+    // highlights active piece and shows available moves
+    activePiece.showPossibleMoves();
+    chessboard.grid[activePiece.x][activePiece.y].color = "#e5de00";
+  }
+
+  
+
+
+  takebackBtn = new Button(width*0.9-btnWidth/2, height/2-btnHeight/2, btnWidth, btnHeight, "black", "TakeBack", 10);
+
+  takebackBtn.display();
+  takebackBtn.onClick(() => {
+    // whenever this button is pressed, a move is undone
+    chessboard.grid = previousBoards[previousBoards.length - 1];
+    chessboard.clear(); // clears the board from the possibemove colors
+    turn = Number(!turn); 
+    activePiece = null;
   });
 }
 
@@ -97,8 +110,8 @@ function displayGameOver() {
   textAlign(CENTER);    // centers text
   fill("black");
 
-  if (turns[Number(!turn)] === "b") {
-    text("BLACK WINS", width/2, height/2);
+  if (turns[Number(!turn)] === "b") { // we use !turn because after the winning move is performed it switches turns
+    text("BLACK WINS", width/2, height/2); 
   } 
 
   else {
@@ -108,16 +121,18 @@ function displayGameOver() {
 }
 
 async function mousePressed() {
-  let x = Math.floor(mouseX/chessboard.cellWidth) - 4;
+  let x = Math.floor(mouseX/chessboard.cellWidth) - 4; // I used the -4 since i centered the grid
   let y = Math.floor(mouseY/chessboard.cellHeight);
   
   if (state === "play-normal") {
-    
+    // logic for player vs player
   
     if ((activePiece === null || chessboard.grid[y][x].piece && activePiece.color === chessboard.grid[y][x].piece.color) && chessboard.grid[y][x].occupied) {
       if (chessboard.grid[y][x].piece.color === turns[turn]) {
+        // when a piece is clicked and its your turn the piece is active/highlighted
         activePiece = chessboard.grid[y][x].piece;
         chessboard.clear();
+
       }
 
       
@@ -125,10 +140,11 @@ async function mousePressed() {
   
   
     if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
+      // moves to the possible spot clicked
+      previousBoards.push(_.cloneDeep(chessboard.grid)); // adds a clone of the current grid to previousBoards 
+      await activePiece.move(y, x); // await keyword makes sure this line is finished running before moving on
       
-      previousBoards.push(_.cloneDeep(chessboard.grid));
-      activePiece.move(y, x);
-      
+      // clear the board and switch turns
       activePiece = null;
 
       turn = Number(!turn);
@@ -141,11 +157,10 @@ async function mousePressed() {
   }
 
   if (state === "play-ai") {
-    
-  
+    // logic for player vs ai
   
     if ((activePiece === null || chessboard.grid[y][x].piece && activePiece.color === chessboard.grid[y][x].piece.color) && chessboard.grid[y][x].occupied) {
-      if (chessboard.grid[y][x].piece.color === turns[turn] && chessboard.grid[y][x].piece.color === "w") {
+      if (chessboard.grid[y][x].piece.color === turns[turn] && chessboard.grid[y][x].piece.color === "w") { // white is the player so only its pieces will display possible spots
         activePiece = chessboard.grid[y][x].piece;
         chessboard.clear();
       }
@@ -155,31 +170,32 @@ async function mousePressed() {
   
   
     if (activePiece !== null && chessboard.grid[y][x].color === "rgba(0, 208, 0, 0.5)") {
-    
-      await activePiece.move(y, x, state);
+
+      activePiece.move(y, x);
       
       activePiece = null;
       moveSound.play();
-
-      turn = 1;
     
       chessboard.clear();
-
-      
+      turn = 1;
       
     }
 
     if (turns[turn] === "b") {
-      let moveArr = chessboard.minimaxRoot(chessboard.pieces, 3, 1);
-      console.log(moveArr);
-      let piece = moveArr.piece;
 
-      if (piece.name === "pawn" || piece.name === "king" || piece.name === "knight"){
-        piece.x-=2;
-      }
+      // a timeout is used since it would run instantly otherwise
+      // this is to decrease confusion among the player(white)
+      setTimeout(async() => {
+        let move = chessboard.aiMove("b"); // generates a move object with pos data and which piece to be used
+        let piece = move.piece; 
+  
+        
+        
+        await chessboard.grid[piece.x][piece.y].piece.move(move.to.x, move.to.y);
+        turn = 0;
+      }, 1000);
+      chessboard.clear();
       
-      chessboard.grid[piece.x][piece.y].piece.move(moveArr.to.x, moveArr.to.y);
-      turn = 0;
     }
   }
   
