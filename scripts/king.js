@@ -3,7 +3,7 @@ class King extends Piece {
   constructor(color, x, y, chessboard) {
     super("king", color, x, y, chessboard);
     this.inDanger = false;
-    this.checkList = [[1, 0], [0, 1], [-1, 0], [0, -1], [1,1], [-1, 1], [-1, -1], [1, -1]];
+    this.checkList = [[1, 0], [0, 1], [-1, 0], [0, -1], [1,1], [-1, 1], [-1, -1], [1, -1]]; // contains all the directions it can go
   }
   
   getPossibleMoves() {

@@ -10,19 +10,9 @@ class ChessBoard {
 
     this.turns = ["w", "b"];
     this.turn = 0;
-    
-    this.cellWidth = width/8;
-    this.cellHeight = height/8;
 
     
-
-    if (this.cellWidth > this.cellHeight) {
-      this.cellWidth = this.cellHeight;
-    }
-
-    else {
-      this.cellHeight = this.cellWidth;
-    }
+    this.init();
 
     // creates a grid
     for (let i = 0; i < 8; i++) {

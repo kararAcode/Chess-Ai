@@ -20,8 +20,7 @@ let state = "start";
 let playerBtn;
 let aiBtn;
 let takebackBtn;
-let btnWidth = 180;
-let btnHeight = 80;
+
 
 let previousBoards = [];
 
@@ -56,8 +55,10 @@ function draw() {
 }
 
 function startScreen() {
+  let btnWidth = 180;
+  let btnHeight = 80;
+
   background("black");
-  
 
   stroke(255);
   playerBtn = new Button(width/2-btnWidth/2, height/2-btnHeight/2, btnWidth, btnHeight, "black", "Player vs Player", 10); 
@@ -78,6 +79,8 @@ function startScreen() {
 }
 
 function gameplay() {
+  let btnWidth = 0.12 * width;
+  let btnHeight = 0.08 * height;
   noStroke();
   background(255);
   chessboard.display(); // display the board/grid
@@ -121,7 +124,7 @@ function displayGameOver() {
 }
 
 async function mousePressed() {
-  let x = Math.floor(mouseX/chessboard.cellWidth) - 4; // I used the -4 since i centered the grid
+  let x = Math.floor(mouseX/chessboard.cellWidth) - Math.round((width/2 - chessboard.cellWidth*4)/chessboard.cellWidth); // I have to factor in that the grid was offset by width/2 - chessboard.cellWidth*4 
   let y = Math.floor(mouseY/chessboard.cellHeight);
   
   if (state === "play-normal") {
@@ -201,6 +204,10 @@ async function mousePressed() {
   
 }
 
+window.addEventListener("resize", () => {
+  createCanvas(windowWidth, windowHeight);
+  chessboard.init();
+});
 
 
 
